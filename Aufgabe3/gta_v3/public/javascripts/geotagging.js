@@ -107,7 +107,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         });
 
         var urlString = "https://www.mapquestapi.com/staticmap/v4/getmap?key=" +
-            apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lat + "," + lon + "&" + tagList;
+            apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lat + "," + lon + "&" + tagList + "&marker=construction-lg";
 
         console.log("Generated Maps Url: " + urlString);
         return urlString;

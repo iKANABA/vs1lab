@@ -28,9 +28,12 @@ app.set('view engine', 'ejs');
  * Konfiguriere den Pfad für statische Dateien.
  * Teste das Ergebnis im Browser unter 'http://localhost:3000/'.
  */
+
+// TODO:
+
 app.use(express.static(__dirname + "/public"));
 
-// TODO: CODE ERGÄNZEN
+
 
 /**
  * Konstruktor für GeoTag Objekte.
@@ -38,6 +41,16 @@ app.use(express.static(__dirname + "/public"));
  */
 
 // TODO: CODE ERGÄNZEN
+
+function GeoTag(latitude, longitude, name, hashtag) {
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.name = name;
+    this.hashtag = hashtag;
+    this.ret = function () {
+    return this.name +"("+this.latitude + "," + this.longitude +")"+ this.hashtag;
+    };
+};
 
 /**
  * Modul für 'In-Memory'-Speicherung von GeoTags mit folgenden Komponenten:
@@ -48,7 +61,20 @@ app.use(express.static(__dirname + "/public"));
  * - Funktion zum Löschen eines Geo Tags.
  */
 
-// TODO: CODE ERGÄNZEN
+// TODO:
+
+var test = new GeoTag(123,234, "testname", "#hashtag");
+var geoTags = [];
+console.log("vorher GeoTags: " + geoTags);
+
+function newTag(){
+    geoTags.push(new GeoTag(987, 765,"olaf", "#Olaf").ret());
+};
+
+newTag();
+
+console.log("nachher GeoTags: " + geoTags);
+
 
 /**
  * Route mit Pfad '/' für HTTP 'GET' Requests.
