@@ -28,6 +28,7 @@ app.set('view engine', 'ejs');
  * Konfiguriere den Pfad für statische Dateien.
  * Teste das Ergebnis im Browser unter 'http://localhost:3000/'.
  */
+app.use(express.static(__dirname + "/public"));
 
 // TODO: CODE ERGÄNZEN
 
