@@ -52,6 +52,13 @@ function GeoTag(latitude, longitude, name, hashtag) {
     };
 };
 
+function GeoTag2(latitude, longitude, name, hashtag) {
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.name = name;
+    this.hashtag = hashtag;
+}
+
 /**
  * Modul für 'In-Memory'-Speicherung von GeoTags mit folgenden Komponenten:
  * - Array als Speicher für Geo Tags.
@@ -62,19 +69,13 @@ function GeoTag(latitude, longitude, name, hashtag) {
  */
 
 // TODO:
+var geoTags = [];
 
 var test = new GeoTag(123,234, "testname", "#hashtag");
-var geoTags = [];
-console.log("vorher GeoTags: " + geoTags);
-
+geoTags.push(test);
 function newTag(){
     geoTags.push(new GeoTag(987, 765,"olaf", "#Olaf").ret());
 };
-
-newTag();
-
-console.log("nachher GeoTags: " + geoTags);
-
 
 /**
  * Route mit Pfad '/' für HTTP 'GET' Requests.
@@ -105,6 +106,10 @@ app.get('/', function(req, res) {
  */
 
 // TODO: CODE ERGÄNZEN START
+
+app.post('/tagging', function(req, res) {
+    res.render('gta', {taglist: [geoTags]});
+});
 
 /**
  * Route mit Pfad '/discovery' für HTTP 'POST' Requests.
