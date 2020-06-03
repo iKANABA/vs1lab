@@ -106,9 +106,13 @@ app.get('/', function(req, res) {
  */
 
 // TODO: CODE ERGÄNZEN START
+var todos = [];
+todos.push({message: 'Test'});
 
 app.post('/tagging', function(req, res) {
-    res.render('gta', {taglist: [geoTags]});
+    res.render('todos'
+
+    );
 });
 
 /**
