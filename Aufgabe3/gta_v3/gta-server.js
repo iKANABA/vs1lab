@@ -111,6 +111,7 @@ todos.push({message: 'Test'});
 
 app.post('/tagging', function(req, res) {
     res.render('todos'
+        //send here in jason format the geotag
 
     );
 });
