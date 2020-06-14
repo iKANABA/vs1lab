@@ -42,22 +42,13 @@ app.use(express.static(__dirname + "/public"));
 
 // TODO: CODE ERGÄNZEN
 
-function GeoTag(latitude, longitude, name, hashtag) {
+function GeoTagFunc(latitude, longitude, name, hashtag) {
     this.latitude = latitude;
     this.longitude = longitude;
     this.name = name;
     this.hashtag = hashtag;
-    this.ret = function () {
-    return this.name +"("+this.latitude + "," + this.longitude +")"+ this.hashtag;
-    };
 };
 
-function GeoTag2(latitude, longitude, name, hashtag) {
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.name = name;
-    this.hashtag = hashtag;
-}
 
 /**
  * Modul für 'In-Memory'-Speicherung von GeoTags mit folgenden Komponenten:
@@ -69,13 +60,54 @@ function GeoTag2(latitude, longitude, name, hashtag) {
  */
 
 // TODO:
-var geoTags = [];
+var geoTaggingModule = (function() {
+    let arr = [];
 
-var test = new GeoTag(123,234, "testname", "#hashtag");
-geoTags.push(test);
-function newTag(){
-    geoTags.push(new GeoTag(987, 765,"olaf", "#Olaf").ret());
+    return {
+        add: function(name, latitude, longitude, hashtag) {
+            arr.push(new GeoTagFunc(name, latitude, longitude, hashtag));
+
+            return arr;
+        },
+        del: function(term) {
+
+            var getelem;
+
+            getelem = arr.filter(grab => grab.name != term && grab.hashtag != term);
+
+            arr = getelem;
+
+        },
+        searchrad: function(latc, longc, array, rad) {
+            var radfilarr = [];
+
+            for (var i = 0; i < array.length; i++) {
+
+                var p = 0.017453292519943295;    //This is  Math.PI / 180
+                var cosi = Math.cos;
+                var calca = 0.5 - cosi((array[i].latitude - latc) * p) / 2 +
+                    cosi(latc * p) * cosi(array[i].latitude * p) *
+                    (1 - cosi((array[i].longitude - longc) * p)) / 2;
+                var R = 6371; //  Earth distance in km so it will return the distance in km
+                var dists = 2 * R * Math.asin(Math.sqrt(calca));
+                console.log(dists + "Km");
+                if (dists <= rad) {
+                    radfilarr.push(array[i]);
+
+                }
+            }
+
+            return radfilarr;
+        },
+        searchterm: (array, term) {
+        let filtered = [];
+
+
+        filtered = arr.filter(grab => grab.name == term || grab.hashtag == term);
+        return filtered;
+    }
 };
+})();
 
 /**
  * Route mit Pfad '/' für HTTP 'GET' Requests.
@@ -86,10 +118,17 @@ function newTag(){
  * Als Response wird das ejs-Template ohne Geo Tag Objekte gerendert.
  */
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
+
     res.render('gta', {
-        taglist: []
+        tagliste: [],
+        filterarr: "[]",
+        lat: [],
+        long: [],
+        hlat: req.body.hiddenLatitude,
+        hlong: req.body.hiddenLongitude
     });
+
 });
 
 /**
@@ -106,14 +145,19 @@ app.get('/', function(req, res) {
  */
 
 // TODO: CODE ERGÄNZEN START
-var todos = [];
-todos.push({message: 'Test'});
 
-app.post('/tagging', function(req, res) {
-    res.render('todos'
-        //send here in jason format the geotag
+app.post('/tagging', function (req, res) {
 
-    );
+    geoTaggingModule.add(req.body.name, req.body.latitude, req.body.longitude, req.body.hashtag);
+
+    res.render('gta', {
+        tagliste: arr,
+        filterarr: "[]",
+        lat: req.body.latitude,
+        long: req.body.longitude,
+        hlat: req.body.hiddenLatitude,
+        hlong: req.body.hiddenLongitude
+    });
 });
 
 /**
@@ -129,6 +173,52 @@ app.post('/tagging', function(req, res) {
  */
 
 // TODO: CODE ERGÄNZEN
+app.post('/discovery', function (req, res) {
+
+    if (req.body.filter == 'go filter' && req.body.searchQuery != undefined) {
+        var filteredarr = geoTaggingModule.searchterm(arr, req.body.searchQuery);
+        filteredarr = geoTaggingModule.searchrad(req.body.hiddenLatitude, req.body.hiddenLongitude, filteredarr, 30);
+
+
+        res.render('gta', {
+            tagliste: filteredarr,
+            filterarr: JSON.stringify(filteredarr),
+            lat: req.body.latitude,
+            long: req.body.longitude,
+            hlat: req.body.hiddenLatitude,
+            hlong: req.body.hiddenLongitude
+        });
+
+
+    }
+
+    if (req.body.throw == 'delete') {
+
+        geoTaggingModule.del(req.body.searchQuery);
+
+
+        res.render('gta', {
+            tagliste: arr,
+            filterarr: "[]",
+            lat: req.body.latitude,
+            long: req.body.longitude,
+            hlat: [],
+            hlong: []
+        });
+    }
+
+    if (req.body.all == 'show all') {
+        res.render('gta', {
+            tagliste: arr,
+            filterarr: "[]",
+            lat: req.body.latitude,
+            long: req.body.longitude,
+            hlat: [],
+            hlong: []
+        });
+    }
+
+});
 
 /**
  * Setze Port und speichere in Express.

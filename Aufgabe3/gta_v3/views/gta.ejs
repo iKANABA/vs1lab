@@ -64,9 +64,15 @@
 			<fieldset>
 				<legend>Filter by Searchterm</legend>
 
-				<input type="search" placeholder="search term">
+				<input type="text" name="searchQuery" id="searchQuery" placeholder="search term!">
 
-				<button type="submit" name="tag-search">apply</button>
+				<input type="number"  name="hiddenLatitude"id="hiddenLatitude" placeholder="latitude2" value="<%=hlat%>" step="0.00001" hidden="" >
+
+				<input type="number"  name="hiddenLongitude" id="hiddenLongitude" placeholder="longitude" value="<%=hlong%>" step="0.00001" hidden="" >
+
+				<input type="submit" name="filter"value="go filter">
+				<input type="Submit" name="throw"value="delete">
+				<input type="Submit" name="all"value="show all">
 
 			</fieldset>
 
@@ -82,7 +88,7 @@
 			</div>
 
 			<div class="tagmap">
-				<img id="result-img" src="./images/mapview.jpg" alt="a map with locations"/>
+				<img id="result-img" data-tags=<%-filterarr%> src="./images/mapview.jpg" alt="a map with locations"/>
 				<div class="caption">Result map</div>
 			</div>
 		</div>
