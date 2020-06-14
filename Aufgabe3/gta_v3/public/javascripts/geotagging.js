@@ -123,18 +123,35 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
             tryLocate((position) => {
                 console.log(position);
-                var url = getLocationMapSrc(position.coords.latitude, position.coords.longitude);
-                console.log(url);
+
+                var getstr = $("#result-img").attr("data-tags");
+                var getobjk = JSON.parse(getstr);
+
+
+                var url = getLocationMapSrc(position.coords.latitude, position.coords.longitude, getobjk);
+
+
                 $("#result-img").attr("src", url);
 
-                $("#tag-form #latitude").val(position.coords.latitude);
-                $("#tag-form #longitude").val(position.coords.longitude);
+                if ($("#latitude").attr("value").length == 0) {
 
-                $("#filter-form #hiddenLatitude").val(position.coords.latitude);
-                $("#filter-form #hiddenLongitude").val(position.coords.longitude);
+                    console.log(url);
+
+                    $("#tag-form #latitude").val(position.coords.latitude.toFixed(5));
+                    $("#tag-form #longitude").val(position.coords.longitude.toFixed(5));
+
+                }
+
+                $("#filter-form #hiddenLatitude").attr("value", position.coords.latitude.toFixed(5));
+                $("#filter-form #hiddenLongitude").attr("value", position.coords.longitude.toFixed(5));
+
+
+
+
             }, (errorMessage) => {
                 alert(errorMessage);
             });
+
 
         }
 
