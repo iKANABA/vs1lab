@@ -13,7 +13,7 @@ console.log("The script is going to start...");
 // Hier wird die verwendete API für Geolocations gewählt
 // Die folgende Deklaration ist ein 'Mockup', das immer funktioniert und eine fixe Position liefert.
 GEOLOCATIONAPI = {
-    getCurrentPosition: function(onsuccess) {
+    getCurrentPosition: function (onsuccess) {
         onsuccess({
             "coords": {
                 "latitude": 49.013790,
@@ -46,9 +46,9 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
      * Bei Fehler Callback 'onerror' mit Meldung.
      * Callback Funktionen als Parameter übergeben.
      */
-    var tryLocate = function(onsuccess, onerror) {
+    var tryLocate = function (onsuccess, onerror) {
         if (geoLocationApi) {
-            geoLocationApi.getCurrentPosition(onsuccess, function(error) {
+            geoLocationApi.getCurrentPosition(onsuccess, function (error) {
                 var msg;
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
@@ -72,17 +72,17 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     };
 
     // Auslesen Breitengrad aus der Position
-    var getLatitude = function(position) {
+    var getLatitude = function (position) {
         return position.coords.latitude;
     };
 
     // Auslesen Längengrad aus Position
-    var getLongitude = function(position) {
+    var getLongitude = function (position) {
         return position.coords.longitude;
     };
 
     // Hier Google Maps API Key eintragen
-    var apiKey = "Up26vSGHDDH6iQi3Sk2SDF8K7fAOfLFo";
+    var apiKey = "CYtZxFxPUaI6CafQ2nhgLgOuArdMcczt";
 
     /**
      * Funktion erzeugt eine URL, die auf die Karte verweist.
@@ -93,25 +93,30 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
      * tags : Array mit Geotag Objekten, das auch leer bleiben kann
      * zoom: Zoomfaktor der Karte
      */
-    var getLocationMapSrc = function(lat, lon, tags, zoom) {
-        zoom = typeof zoom !== 'undefined' ? zoom : 16;
+    var getLocationMapSrc = function (lat, lon, tags, zoom) {
+
+        zoom = typeof zoom !== 'undefined' ? zoom : 10;
 
         if (apiKey === "YOUR_API_KEY_HERE") {
             console.log("No API key provided.");
             return "images/mapview.jpg";
         }
 
-        var tagList = "&pois=You," + lat + "," + lon;
-        if (tags !== undefined) tags.forEach(function(tag) {
+        var tagList = "&pois=1," + lat + "," + lon;
+
+
+        if (tags !== undefined) tags.forEach(function (tag) {
             tagList += "|" + tag.name + "," + tag.latitude + "," + tag.longitude;
         });
 
+
         var urlString = "https://www.mapquestapi.com/staticmap/v4/getmap?key=" +
-            apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lat + "," + lon + "&" + tagList + "&marker=construction-lg";
+            apiKey + "&size=600,400&zoom=" + zoom + "&center=" + lat + "," + lon + "&" + tagList + "&type=hyb";
 
         console.log("Generated Maps Url: " + urlString);
         return urlString;
     };
+
 
     return { // Start öffentlicher Teil des Moduls ...
 
@@ -119,17 +124,17 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
 
-        updateLocation: function() {
+        updateLocation: function () {
+
 
             tryLocate((position) => {
                 console.log(position);
 
-                var getstr = $("#result-img").attr("data-tags");
-                var getobjk = JSON.parse(getstr);
+                var getstr = $("#result-img").attr("data-tags");            //holt objekte als jason string von filtered array aus dem html attribut
+                var getobjk = JSON.parse(getstr);                           //wandelt string in objekt um
 
 
                 var url = getLocationMapSrc(position.coords.latitude, position.coords.longitude, getobjk);
-
 
                 $("#result-img").attr("src", url);
 
@@ -163,6 +168,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
  * angegebene Funktion aufgerufen. An dieser Stelle beginnt die eigentliche Arbeit
  * des Skripts.
  */
-$(function() {
+$(function () {
     gtaLocator.updateLocation();
 });
