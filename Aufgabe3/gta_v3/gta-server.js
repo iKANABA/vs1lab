@@ -186,6 +186,8 @@ app.post('/discovery', function (req, res) {
             long: req.body.longitude,
             hlat: req.body.hiddenLatitude,
             hlong: req.body.hiddenLongitude
+            //hlat: req.body.filteredarr[0].latitude,
+            //hlong: req.body.filteredarr[0].longitude,
         });
 
 
