@@ -150,11 +150,11 @@ app.post('/tagging', function (req, res) {
 
     res.render('gta', {
         tagliste: geoTaggingModule.getArray(),
-        filterarr: "[]",
+        filterarr: JSON.stringify(geoTaggingModule.getArray()), //"[]", //geoTaggingModule.getArray(),
         lat: req.body.latitude,
         long: req.body.longitude,
         hlat: req.body.hiddenLatitude,
-        hlong: req.body.hiddenLongitude
+        hlong: req.body.hiddenLongitude,
     });
 });
 
@@ -176,7 +176,7 @@ app.post('/discovery', function (req, res) {
 
     if (req.body.filter == 'go filter' && req.body.searchQuery != undefined) {
         var filteredarr = geoTaggingModule.searchterm(req.body.searchQuery);
-        filteredarr = geoTaggingModule.searchrad(req.body.hiddenLatitude, req.body.hiddenLongitude, filteredarr, 50);
+        filteredarr = geoTaggingModule.searchrad(req.body.hiddenLatitude, req.body.hiddenLongitude, filteredarr, 500000);
 
 
         res.render('gta', {
@@ -186,8 +186,8 @@ app.post('/discovery', function (req, res) {
             long: req.body.longitude,
             hlat: req.body.hiddenLatitude,
             hlong: req.body.hiddenLongitude
-            //hlat: req.body.filteredarr[0].latitude,
-            //hlong: req.body.filteredarr[0].longitude,
+            //hlat: req.body.filteredarr.latitude,
+            //hlong: req.body.filteredarr.longitude,
         });
 
 
@@ -200,7 +200,7 @@ app.post('/discovery', function (req, res) {
 
         res.render('gta', {
             tagliste: geoTaggingModule.getArray(),
-            filterarr: "[]",
+            filterarr: JSON.stringify(geoTaggingModule.getArray()),
             lat: req.body.latitude,
             long: req.body.longitude,
             hlat: [],
@@ -211,7 +211,7 @@ app.post('/discovery', function (req, res) {
     if (req.body.all == 'show all') {
         res.render('gta', {
             tagliste: geoTaggingModule.getArray(),
-            filterarr: "[]",
+            filterarr: JSON.stringify(geoTaggingModule.getArray()),
             lat: req.body.latitude,
             long: req.body.longitude,
             hlat: [],
