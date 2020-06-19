@@ -95,7 +95,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
      */
     var getLocationMapSrc = function (lat, lon, tags, zoom) {
 
-        zoom = typeof zoom !== 'undefined' ? zoom : 14;
+        zoom = typeof zoom !== 'undefined' ? zoom : 15;
 
         if (apiKey === "YOUR_API_KEY_HERE") {
             console.log("No API key provided.");
