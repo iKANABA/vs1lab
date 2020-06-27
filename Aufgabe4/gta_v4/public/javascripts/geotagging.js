@@ -171,3 +171,28 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 $(function () {
     gtaLocator.updateLocation();
 });
+
+/*********************************************************************/
+
+//var XMLHttprequest = require("xmlhttprequest").XMLHttprequest;
+
+var ajax = new XMLHttpRequest();
+
+ajax.open("GET","/");
+ajax.onreadystatechange = function() {
+    console.log("readyState = " + this.readyState + ", status = " + this,status);
+    if (this.readyState == 4 && this.status == 200) {
+        var result = this.responseText;
+        console.log(result);
+    }
+};
+ajax.send();
+/*
+document.getElementById("filter").addEventListener("click", function(event){
+    event.preventDefault();
+    var ajax = new XMLHttpRequest();
+
+    ajax.open("GET", "/discovery?searchterm=" + document.getElementById("searchQuery").value);
+    ajax.send();
+});
+*/
