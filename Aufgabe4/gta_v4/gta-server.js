@@ -23,6 +23,7 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+app.use(bodyParser.json());
 
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
@@ -133,6 +134,17 @@ app.get('/', function (req, res) {
 
 });
 
+
+//**********************************************************************
+
+    //TODO
+
+
+
+
+
+//**********************************************************************
+
 /**
  * Route mit Pfad '/tagging' für HTTP 'POST' Requests.
  * (http://expressjs.com/de/4x/api.html#app.post.method)
@@ -224,7 +236,32 @@ app.post('/discovery', function (req, res) {
 
 });
 
+/**
+ * Tests während API Tutorial.
+ */
+let geoTags = [
+    {tag: 1, location: 'Frankfurt'},
+    {tag: 2, location: 'Sandhausen'},
+    {tag: 3, location: 'Ettlingen'}
+    ];
 
+app.get('/geotags', (req, res) => {
+    res.send(geoTags);
+});
+
+//filter bsp: /api/courses/:id
+app.get('/geotags/:tag', function(req, res) {
+    const geoTag = geoTags.find(c => c.tag === parseInt(req.params.tag));
+    if(!geoTag) res.status(404).send('Geo Tag nicht gefunden!');
+
+    res.send(geoTag);
+});
+
+app.post('/geotags', function(req, res) {
+    const newGeoTag = {tag: geoTags.length + 1, location: req.body.name};
+    geoTags.push(newGeoTag);
+    res.send(newGeoTag);
+});
 
 /**
  * Setze Port und speichere in Express.

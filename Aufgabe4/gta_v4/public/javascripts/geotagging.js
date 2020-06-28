@@ -175,7 +175,7 @@ $(function () {
 /*********************************************************************/
 
 //var XMLHttprequest = require("xmlhttprequest").XMLHttprequest;
-
+/*
 var ajax = new XMLHttpRequest();
 
 ajax.open("GET","/");
@@ -196,3 +196,38 @@ document.getElementById("filter").addEventListener("click", function(event){
     ajax.send();
 });
 */
+
+document.getElementById("date1").addEventListener("click", ajaks);
+
+
+function ajaqs() {
+    var ajax = new XMLHttpRequest();
+    ajax.open("GET","/getter",true);
+    ajax.onreadystatechange = function () {
+        if (ajax.readyState == 4 && ajax.status == 200) {
+            //console.log (xhr.responseText);
+            document.querySelector("#test").innerHTML = ajax.responseText;
+        }
+    }
+
+    ajax.send ();
+}
+
+function ajaqs2() {
+    var ajax = new XMLHttpRequest();
+    ajax.get("GET","/geotags",true);
+
+    ajax.send ();
+}
+
+app.get('/geotags', (req, res) => {
+    res.send(geoTags);
+});
+
+//filter bsp: /api/courses/:id
+app.get('/geotags/:tag', function(req, res) {
+    const geoTag = geoTags.find(c => c.tag === parseInt(req.params.tag));
+    if(!geoTag) res.status(404).send('Geo Tag nicht gefunden!');
+
+    res.send(geoTag);
+});
