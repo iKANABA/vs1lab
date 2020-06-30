@@ -237,7 +237,7 @@ app.post('/discovery', function (req, res) {
 });
 
 /**
- * Tests während API Tutorial.
+ * Aufgabe 4
  */
 let geoTags = [
     {tag: 1, location: 'Frankfurt'},
@@ -281,3 +281,6 @@ var server = http.createServer(app);
  */
 
 server.listen(port);
+
+
+searchforgeotaf
