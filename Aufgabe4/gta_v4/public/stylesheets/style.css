@@ -1,10 +1,13 @@
-*{
+
+
+
+* {
   box-sizing: border-box;
 }
 
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif, bold;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -15,75 +18,73 @@ input {
   padding: 5px;
 }
 
-/*------Normal CSS------*/
+/* Spezifisch */
 
-.tagging{
-  //border: 3px red solid;
+header, footer {
+  background: grey;
+  color: #FFF;
   padding: 10px;
 }
 
-.discovery{
-  //border: 3px red solid;
-  padding: 10px;
+.tagging input {
+  display: block;
 }
 
-.taglist{
-  //color: white;
-  //background: #02B6FD;
-  padding: 0px;
+.discovery {
+  padding-left: 15px;
 }
 
-#results li{
-  color: white;
-  background: #02B6FD;
-  padding: 5px;
-  margin: 10px;
-  font-weight: bold;
+.discovery form {
+  display: block;
+  margin-bottom: 15px;
 }
 
-.tagmap{
-  padding: 10px;
+#results {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
-/*-----Grid Stuff-----*/
+#results li {
+  background: #00B7FF;
+  color: #FFF;
+  margin-bottom: 5px;
+  padding: 5px
+}
 
-.row{
+.tagmap {
+  padding-left: 15px;
+}
+
+/* Grid System mit Flexboxen */
+
+.row {
   display: flex;
   flex-wrap: wrap;
 }
 
-
-
-@media screen and (min-width: 1200px) {
-  .Gtagging{
-    flex: 1;
-  }
-
-  .Gdiscovery{
-    flex: 3;
+@media screen and (max-width: 1100px) {
+  .col-3, .col-4, .col-5, .col-6, .col-7 {
+    width: 100% !important;
   }
 }
 
-/*Header und Footer*/
-
-.header{
-  background: grey;
-  padding: 10px;
-  //margin: 10px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  color: white;
+.col-3 {
+  width: 30%;
 }
 
-.footer{
-  background: grey;
-  padding: 10px;
-  //margin: 10px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  color: white;
-
+.col-4 {
+  width: 40%;
 }
 
+.col-5 {
+  width: 50%;
+}
 
+.col-6 {
+  width: 60%;
+}
 
+.col-7 {
+  width: 70%;
+}

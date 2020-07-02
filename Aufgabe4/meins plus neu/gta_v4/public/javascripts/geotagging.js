@@ -183,7 +183,7 @@ $(function () {
     gtaLocator.updateLocation();
     document.getElementById("submitter").addEventListener("click", submitterf);
     document.getElementById("filterid").addEventListener("click", filterf);
-    document.getElementById("allid").addEventListener("click", filterf);
+    document.getElementById("allid").addEventListener("click", allf);
     document.getElementById("deleteid").addEventListener("click", deletef);
 });
 
@@ -196,7 +196,7 @@ var apiKey="CYtZxFxPUaI6CafQ2nhgLgOuArdMcczt";
         return "images/mapview.jpg";
     }
 
-    var tagList = "&pois=1," + lat + "," + lon;
+    var tagList = "&pois=1," + 49.05509 + "," + 8.66590;
 
     var centercoords;
 
@@ -237,13 +237,10 @@ function submitterf(event){
     request.setRequestHeader("Content-Type", "application/json");
 
     request.onreadystatechange = function () {
-        if (request.readyState == 4 && request.status == 201) {
-            console.log (request.responseText);
-            document.querySelector("#results").innerHTML = refresh(JSON.parse(request.response));
-
-            var newurl=makemap(document.getElementById("hiddenLatitude").value,document.getElementById("hiddenLongitude").value,JSON.parse(request.response));
-            document.getElementById("result-img").setAttribute("src", newurl);
-
+        if (request.readyState == 4 && request.status == 200) {
+            //console.log (xhr.responseText);
+            document.querySelector("#results").innerHTML = request.responseText;
+         refresh('/geotags/all');
         }
     }
 
@@ -262,7 +259,7 @@ function filterf(event){
     event.preventDefault();
     var request = new XMLHttpRequest();
     var inputvalue=document.getElementById("searchQuery").value;
-    if(inputvalue!=0 && this.id != "allid") {
+    if(inputvalue!=0) {
         if (inputvalue[0] == '#') {
             console.log(inputvalue);
             inputvalue = inputvalue.replace("#", "%23");
@@ -277,20 +274,18 @@ function filterf(event){
         if (request.readyState == 4 && request.status == 200) {
             //console.log (xhr.responseText);
             console.log (request.response);
-            document.querySelector("#results").innerHTML = refresh(JSON.parse(request.response));
-
-            var newurl=makemap(document.getElementById("hiddenLatitude").value,document.getElementById("hiddenLongitude").value,JSON.parse(request.response));
-            document.getElementById("result-img").setAttribute("src", newurl);
-
+            document.querySelector("#results").innerHTML = request.responseText;
+            if(inputvalue!=0) {
+                refresh('/geotags/map?searchterm=' + inputvalue);
+            }
         }
 
     }
 
     request.send ();
-    document.getElementById("searchQuery").value="";
 }
 
-/*
+
     function allf(event){
     event.preventDefault();
     var request = new XMLHttpRequest();
@@ -298,59 +293,33 @@ function filterf(event){
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
             //console.log (xhr.responseText);
-            document.querySelector("#results").innerHTML = refresh(JSON.parse(request.response));
-
-            var newurl=makemap(document.getElementById("hiddenLatitude").value,document.getElementById("hiddenLongitude").value,JSON.parse(request.response));
-            document.getElementById("result-img").setAttribute("src", newurl);
+            document.querySelector("#results").innerHTML = request.responseText;
+            refresh('/geotags/all');
         }
     }
 
     request.send ();
 }
 
-*/
 
 
 function deletef(event){
     event.preventDefault();
     var request = new XMLHttpRequest();
-    request.open("DELETE","/geotags/"+document.getElementById("searchQuery").value,true);
+    request.open("DELETE","/geotags/delete/"+document.getElementById("searchQuery").value,true);
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
             //console.log (xhr.responseText);
             console.log (request.response);
-            document.querySelector("#results").innerHTML = refresh(JSON.parse(request.response));
-
-            var newurl=makemap(document.getElementById("hiddenLatitude").value,document.getElementById("hiddenLongitude").value,JSON.parse(request.response));
-            document.getElementById("result-img").setAttribute("src", newurl);
+            document.querySelector("#results").innerHTML = request.responseText;
+            refresh("/geotags/all");
         }
 
     }
 
     request.send ();
-    document.getElementById("searchQuery").value="";
 }
 
-function refresh(tagliste){
-
-        var htmlString = "";
-
-    if (tagliste !== undefined) tagliste.forEach(function(gtag) {
-
-        htmlString += "<li>" + gtag.name + "(" + gtag.latitude + "," + gtag.longitude + ")" + gtag.hashtag + "</li>";
-
-
-    });
-
-    return htmlString;
-}
-
-
-//var htmlString = "<li>" + gtag.name + "(" + gtag.latitude + "," + gtag.longitude + ")" + gtag.hashtag + "</li>";
-//console.log(htmlString);
-
-
-/*
 function refresh (dir) {
 
     var request = new XMLHttpRequest();
@@ -371,7 +340,6 @@ console.log(JSON.parse(request.response));
 
 }
 
-*/
 
 
 

@@ -82,12 +82,10 @@ var geoTaggingModule = (function() {
     
     return {
 
+
         pushedit: function(obj,i) {
-
-            var f = arr.findIndex(grab => grab.id == idnew);
-
             arr[i]=obj;
-            arr[i].id=parseInt(idnew);
+            arr[i].id=i+1;
             return;
         },
 
@@ -197,14 +195,15 @@ app.post('/poster',function(req,res){
     var fruits =req.body;
     console.log(fruits);
 
-    geoTaggingModule.pushobj(fruits);
-
-    //res.status(201).send(JSON.stringify(geoTaggingModule.getArray()));
-    //console.log(status);
+      geoTaggingModule.pushobj(fruits);
     res.status(201);
-    res.send(JSON.stringify(geoTaggingModule.getArray()));
+    res.render('minigta', {
+        tagliste: geoTaggingModule.getArray(),
+
+    });
 
 });
+
 
 
 //search objs
@@ -214,30 +213,42 @@ app.get('/geotags',function(req,res){
     if(query["searchterm"]!==undefined&&query["searchterm"]!=="") {
         var filteredarr = geoTaggingModule.searchterm(query["searchterm"]);
         //filteredarr = geoTaggingModule.searchrad(req.body.hiddenLatitude, req.body.hiddenLongitude, filteredarr, 30);
-        //res.status(201);
-        res.send(JSON.stringify(filteredarr));
-    }else {
-        res.send(JSON.stringify(geoTaggingModule.getArray()));
-    }
+
+        res.render('minigta', {
+            tagliste: filteredarr,
+
+        });
+
+    }else{res.render('minigta', {
+        tagliste: geoTaggingModule.getArray(),
+
+    })}
+
+    //res.send(JSON.stringify(filteredarr));
+    //res.end();
+
 });
 
-/*render all objs
+//render all objs
    app.get('/geotags/all',function(req,res){
 
             res.send(JSON.stringify(geoTaggingModule.getArray()));
 
         });
-*/
+
 
 
 //delete obj
-app.delete('/geotags/:id',function(req,res){
+app.delete('/geotags/delete/:id',function(req,res){
     console.log(req.params.id);
     geoTaggingModule.del(req.params.id);
     //filteredarr = geoTaggingModule.searchrad(req.body.hiddenLatitude, req.body.hiddenLongitude, filteredarr, 30);
 
 
-    res.send(JSON.stringify(geoTaggingModule.getArray()));
+    res.render('minigta', {
+        tagliste: geoTaggingModule.getArray(),
+
+    });
 
 });
 
@@ -248,13 +259,16 @@ app.get('/geotags/:id',function(req,res){
 
 
     var filteredarr = geoTaggingModule.searchid(req.params.id);
-    res.send(JSON.stringify(geoTaggingModule.getArray()));
+    res.render('minigta', {
+        tagliste: filteredarr,
+
+    });
 });
 
 
 
 
-/*JSON string für neue Map
+//JSON string für neue Map
 app.get('/geotags/map',function(req,res){
     var query=url.parse(req.url,true).query;
 
@@ -274,11 +288,11 @@ app.get('/geotags/map',function(req,res){
 
 //res.end();
 });
-*/
+//´´´´´´´´´´´´´´
 
 
 //obj ändern
-app.put('/geotags/:id',function(req,res){
+app.put('/geotags/change/:id',function(req,res){
     console.log(req.params.id);
     console.log(req.body);
     var data=req.body;
@@ -286,7 +300,10 @@ geoTaggingModule.pushedit(data,req.params.id-1);
 
 
 
-    res.send(JSON.stringify(geoTaggingModule.getArray()));
+    res.render('minigta', {
+        tagliste: geoTaggingModule.getArray(),
+
+    });
 
 
 
